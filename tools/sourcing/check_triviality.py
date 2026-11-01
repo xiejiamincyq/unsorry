@@ -119,7 +119,7 @@ def classify(returncode: int, output: str) -> str:
 def _run_probe(module: str, *, runner: Runner, root: Path, timeout: float) -> tuple[int, str]:
     with tempfile.TemporaryDirectory() as tmp:
         probe_file = Path(tmp) / "TrivialityProbe.lean"
-        probe_file.write_text(module, encoding="utf-8")
+        probe_file.write_text(module, encoding="utf-8", newline="\n")
         try:
             result = runner(
                 ("lake", "env", "lean", str(probe_file)),

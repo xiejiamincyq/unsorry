@@ -128,15 +128,15 @@ def write_artifacts(
     os.makedirs("backlog", exist_ok=True)
     os.makedirs("library/Unsorry", exist_ok=True)
     os.makedirs("library/index", exist_ok=True)
-    with open(f"goals/{gid}.lean", "w") as f:
+    with open(f"goals/{gid}.lean", "w", encoding="utf-8", newline="\n") as f:
         f.write(goal_lean)
-    with open(f"goals/{gid}.aisp", "w") as f:
+    with open(f"goals/{gid}.aisp", "w", encoding="utf-8", newline="\n") as f:
         f.write(goal_aisp)
-    with open(f"backlog/{gid}.md", "w") as f:
+    with open(f"backlog/{gid}.md", "w", encoding="utf-8", newline="\n") as f:
         f.write(backlog)
-    with open(f"library/Unsorry/{mod}.lean", "w") as f:
+    with open(f"library/Unsorry/{mod}.lean", "w", encoding="utf-8", newline="\n") as f:
         f.write(proof)
-    with open(f"library/index/{sha}.aisp", "w") as f:
+    with open(f"library/index/{sha}.aisp", "w", encoding="utf-8", newline="\n") as f:
         f.write(index)
 
     return f"{gid}|{name}|{mod}|{sha}"

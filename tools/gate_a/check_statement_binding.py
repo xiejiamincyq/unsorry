@@ -156,6 +156,7 @@ def generate(tree: Path) -> int:
             f"set_option linter.unusedVariables false in\n"
             f"theorem {name}_binding_check : {ftype} := {name}\n",
             encoding="utf-8",
+            newline="\n",
         )
         print(f"generated {binding_path.relative_to(tree)} ({module}) : {ftype}")
     if errors:

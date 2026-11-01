@@ -169,8 +169,8 @@ def write_triple(
 
     lean_path.parent.mkdir(parents=True, exist_ok=True)
     backlog_path.parent.mkdir(parents=True, exist_ok=True)
-    lean_path.write_text(render_lean(slug, lean_sig, preamble), encoding="utf-8")
-    aisp_path.write_text(render_aisp(slug, difficulty, date, aff), encoding="utf-8")
+    lean_path.write_text(render_lean(slug, lean_sig, preamble), encoding="utf-8", newline="\n")
+    aisp_path.write_text(render_aisp(slug, difficulty, date, aff), encoding="utf-8", newline="\n")
     backlog_path.write_text(
         render_backlog(
             slug,
@@ -183,6 +183,7 @@ def write_triple(
             decomposition=decomposition,
         ),
         encoding="utf-8",
+        newline="\n",
     )
     return [lean_path, aisp_path, backlog_path]
 

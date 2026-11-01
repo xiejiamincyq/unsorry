@@ -255,7 +255,7 @@ def main(argv: list[str] | None = None) -> int:
         if sdid:
             solver_changed += 1
         if (did or sdid) and args.apply:
-            path.write_text(new, encoding="utf-8")
+            path.write_text(new, encoding="utf-8", newline="\n")
 
     # Pass B — backfill difficulty on exactly those fixture goals (goals are
     # never archived, so one pass over goals/ fixes active + archived proofs).
@@ -269,7 +269,7 @@ def main(argv: list[str] | None = None) -> int:
         if gdid:
             diff_changed += 1
             if args.apply:
-                gp.write_text(gnew, encoding="utf-8")
+                gp.write_text(gnew, encoding="utf-8", newline="\n")
 
     suffix = "" if args.apply else " [DRY-RUN]"
     print(f"attribution relabel: {'relabelled' if args.apply else 'would relabel'} "
