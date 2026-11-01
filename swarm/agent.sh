@@ -418,7 +418,7 @@ def cmd_aff_bump(args):
         out = rebuilt
     elif hit > 1:
         sys.exit(f"py_helper: {path} has {hit} aff≜ lines, expected ≤1")
-    path.write_text("".join(out), encoding="utf-8")
+    path.write_text("".join(out), encoding="utf-8", newline="\n")
 
 
 def cmd_camel_name(args):
@@ -1074,7 +1074,7 @@ def cmd_rewrite_goal(args):
         sys.exit(f"py_helper: {path} has {status_hits} status≜ lines, expected 1")
     if sha is not None and sha_hits != 1:
         sys.exit(f"py_helper: {path} has {sha_hits} sha≜ lines, expected 1")
-    path.write_text("".join(rewritten), encoding="utf-8")
+    path.write_text("".join(rewritten), encoding="utf-8", newline="\n")
 
 
 COMMANDS = {
@@ -3195,7 +3195,7 @@ except ValueError:
     sys.exit(1)
 
 target_path.parent.mkdir(parents=True, exist_ok=True)
-target_path.write_text(body + "\n", encoding="utf-8")
+target_path.write_text(body + "\n", encoding="utf-8", newline="\n")
 PYEXTRACT
 }
 

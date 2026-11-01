@@ -194,7 +194,7 @@ def _retire_active_record(root: Path, goal: str, block_id: str) -> None:
 
     text = re.sub(r"(src≜)(\S+)", reprefix, text, count=1)
     text = re.sub(r"(lean≜)(\S+)", reprefix, text, count=1)
-    path.write_text(text, encoding="utf-8")
+    path.write_text(text, encoding="utf-8", newline="\n")
 
 
 def cut(root: Path, size: int, source_commit: str, toolchain: str, mathlib: str) -> dict:
@@ -250,9 +250,12 @@ def cut(root: Path, size: int, source_commit: str, toolchain: str, mathlib: str)
         'srcDir = "library"\n'
         'globs = ["Unsorry.+"]\n',
         encoding="utf-8",
+        newline="\n",
     )
     (pkg / "lean-toolchain").write_text(
-        (root / "lean-toolchain").read_text(encoding="utf-8"), encoding="utf-8"
+        (root / "lean-toolchain").read_text(encoding="utf-8"),
+        encoding="utf-8",
+        newline="\n",
     )
     # Reuse the most recent existing block's lake-manifest (same pins) as the
     # archive-package manifest; root's includes the goals package and differs.

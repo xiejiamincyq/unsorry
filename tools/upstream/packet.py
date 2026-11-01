@@ -257,10 +257,14 @@ def main(argv: List[str] | None = None) -> int:
     outdir = args.root / args.outdir if not args.outdir.is_absolute() else args.outdir
     outdir.mkdir(parents=True, exist_ok=True)
     (outdir / f"{args.goal}.md").write_text(
-        render_packet(args.root, args.goal, dedup, args.sponsor), encoding="utf-8"
+        render_packet(args.root, args.goal, dedup, args.sponsor),
+        encoding="utf-8",
+        newline="\n",
     )
     (outdir / f"{args.goal}.patch").write_text(
-        render_patch(args.root, args.goal, args.sponsor), encoding="utf-8"
+        render_patch(args.root, args.goal, args.sponsor),
+        encoding="utf-8",
+        newline="\n",
     )
     print(f"packet: {outdir / args.goal}.md (+ .patch)")
     return 0

@@ -188,7 +188,7 @@ def _segregate_benchmark_goal(root: Path, slug: str) -> None:
             text = text.replace(
                 f"lean≜goals/{slug}.lean", f"lean≜benchmark-goals/{slug}.lean"
             )
-        (dst / f"{slug}.{ext}").write_text(text, "utf-8")
+        (dst / f"{slug}.{ext}").write_text(text, "utf-8", newline="\n")
         src.unlink()
 
 
@@ -242,8 +242,10 @@ def assemble_package(
 
     top = f"{suite_id}-suite"
     sentinel = f"import Mathlib\n\ntheorem {snake(top)} : True := by\n  sorry\n"
-    (pkg_goals / f"{top}.lean").write_text(sentinel, "utf-8")
-    (pkg_goals / f"{top}.aisp").write_text(_open_goal_aisp(top, 0, date), "utf-8")
+    (pkg_goals / f"{top}.lean").write_text(sentinel, "utf-8", newline="\n")
+    (pkg_goals / f"{top}.aisp").write_text(
+        _open_goal_aisp(top, 0, date), "utf-8", newline="\n"
+    )
 
     # Accumulate across batches: keep prior obligations' credit, then add this batch.
     credit_by_slug = _existing_credit(pkg)
@@ -301,6 +303,7 @@ def assemble_package(
         "⟦Λ:Requeue⟧{∀s∈subs:goal(s)≫status≔open}\n"
         "⟦Ε⟧⟨δ≜0.60;τ≜◊⁺⟩\n",
         "utf-8",
+        newline="\n",
     )
     (pkg / "skeleton.aisp").write_text(
         f"𝔸5.1.skeleton.{suite_id}@{date}\n"
@@ -311,6 +314,7 @@ def assemble_package(
         f"⟦Κ:Credit⟧{{{credit_lines}}}\n"
         "⟦Ε⟧⟨δ≜0.60;τ≜◊⁺⟩\n",
         "utf-8",
+        newline="\n",
     )
     (pkg / "target.aisp").write_text(
         f"𝔸5.1.target.{suite_id}@{date}\n"
@@ -319,6 +323,7 @@ def assemble_package(
         f"mathlib≜{mathlib};license≜{license};cohort≜benchmark;status≜open}}\n"
         "⟦Ε⟧⟨δ≜0.60;τ≜◊⁺⟩\n",
         "utf-8",
+        newline="\n",
     )
 
     return {
@@ -346,7 +351,7 @@ def _probe_verdict(lean_text: str, root: Path, *, runner: Callable | None = None
     os.close(fd)
     path = Path(name)
     try:
-        path.write_text(lean_text, encoding="utf-8")
+        path.write_text(lean_text, encoding="utf-8", newline="\n")
         return probe(
             path, battery=TACTIC_BATTERY + EXTRA_BATTERY, root=root, runner=runner
         ).get("verdict", "probe-error")
@@ -369,7 +374,7 @@ def _build_verdict(
     os.close(fd)
     path = Path(name)
     try:
-        path.write_text(lean_text, encoding="utf-8")
+        path.write_text(lean_text, encoding="utf-8", newline="\n")
         try:
             result = runner(
                 ("lake", "env", "lean", str(path)),

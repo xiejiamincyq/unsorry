@@ -77,8 +77,12 @@ def scaffold(root: Path, suite_id: str, *, toolchain: str, mathlib: str, manifes
     """
     vctx = verifier_dir(root, suite_id)
     vctx.mkdir(parents=True, exist_ok=True)
-    (vctx / "lean-toolchain").write_text(toolchain.rstrip("\n") + "\n", encoding="utf-8")
-    (vctx / "lakefile.toml").write_text(_lakefile(suite_id, mathlib), encoding="utf-8")
+    (vctx / "lean-toolchain").write_text(
+        toolchain.rstrip("\n") + "\n", encoding="utf-8", newline="\n"
+    )
+    (vctx / "lakefile.toml").write_text(
+        _lakefile(suite_id, mathlib), encoding="utf-8", newline="\n"
+    )
     shutil.copyfile(manifest_src, vctx / "lake-manifest.json")
     return vctx
 

@@ -176,7 +176,7 @@ def reopen_goal(path: Path) -> None:
         raise ValueError(f"{path}: {status_hits} status≜ lines, expected 1")
     if sha_hits != 1:
         raise ValueError(f"{path}: {sha_hits} sha≜ lines, expected 1")
-    path.write_text("".join(out), "utf-8")
+    path.write_text("".join(out), "utf-8", newline="\n")
 
 
 def apply_plan(plans: list[SubPlan]) -> None:

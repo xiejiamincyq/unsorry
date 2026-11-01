@@ -70,7 +70,7 @@ def run_tool(tool_name: str, arguments: str, workdir: str) -> str:
         file_path = args.get("file_path", "")
         full_path = os.path.join(workdir, file_path) if workdir else file_path
         try:
-            with open(full_path, "r") as f:
+            with open(full_path, "r", encoding="utf-8") as f:
                 return f.read()
         except Exception as e:
             return f"Error reading {file_path}: {e}"
@@ -81,7 +81,7 @@ def run_tool(tool_name: str, arguments: str, workdir: str) -> str:
         full_path = os.path.join(workdir, file_path) if workdir else file_path
         try:
             os.makedirs(os.path.dirname(full_path), exist_ok=True)
-            with open(full_path, "w") as f:
+            with open(full_path, "w", encoding="utf-8", newline="\n") as f:
                 f.write(content)
             return f"Successfully wrote {file_path}"
         except Exception as e:
@@ -93,12 +93,12 @@ def run_tool(tool_name: str, arguments: str, workdir: str) -> str:
         new_string = args.get("new_string", "")
         full_path = os.path.join(workdir, file_path) if workdir else file_path
         try:
-            with open(full_path, "r") as f:
+            with open(full_path, "r", encoding="utf-8") as f:
                 content = f.read()
             if old_string not in content:
                 return f"Error: old_string not found in {file_path}"
             content = content.replace(old_string, new_string, 1)
-            with open(full_path, "w") as f:
+            with open(full_path, "w", encoding="utf-8", newline="\n") as f:
                 f.write(content)
             return f"Successfully edited {file_path}"
         except Exception as e:
@@ -290,7 +290,7 @@ Always produce valid Lean 4 syntax."""
                 parent = os.path.dirname(full_target)
                 if parent:
                     os.makedirs(parent, exist_ok=True)
-                with open(full_target, "w") as f:
+                with open(full_target, "w", encoding="utf-8", newline="\n") as f:
                     f.write(lean)
                 return f"Wrote {target} via text-extraction fallback ({len(lean)} bytes)"
 
