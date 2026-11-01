@@ -29,6 +29,7 @@ are unit-tested without git; the thin ``main`` reads the board and refs via I/O.
 from __future__ import annotations
 
 import collections
+import errno
 import json
 import os
 import subprocess
@@ -150,11 +151,28 @@ def main(argv=None) -> int:
         for r in ordered:
             print(r)
         sys.stdout.flush()
-    except BrokenPipeError:
+    except OSError as exc:
         # The consumer (dispatch_queue's read loop) closes the pipe once it hits
         # its dispatch limit; the unread refs are exactly the ones it chose not to
         # act on, so a short read is normal. Silence the shutdown-time re-raise.
-        os.dup2(os.open(os.devnull, os.O_WRONLY), sys.stdout.fileno())
+        #
+        # POSIX reports the closed pipe as BrokenPipeError (EPIPE); Windows
+        # reports the same condition as OSError EINVAL from the buffered writer
+        # (and again from the interpreter's shutdown flush), which would leak a
+        # traceback into run.sh's logs even though the dispatch succeeded. Swallow
+        # only a closed-pipe write, so a real I/O error (e.g. ENOSPC on a
+        # redirected stdout) still surfaces.
+        if not isinstance(exc, BrokenPipeError) and exc.errno not in (
+            errno.EPIPE,
+            errno.EINVAL,
+        ):
+            raise
+        try:
+            os.dup2(os.open(os.devnull, os.O_WRONLY), sys.stdout.fileno())
+        except OSError:
+            # Even the devnull re-point can fail once the pipe is gone; the
+            # dispatch already succeeded, so never let cleanup raise.
+            pass
     return 0
 
 
